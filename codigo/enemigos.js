@@ -34,7 +34,7 @@ function updateEnemyLabels() {
       return;
     }
     const position = enemy.model.position.clone();
-    position.y += 0.58;
+    position.y += 1.62;
     position.project(camera);
     const visible = position.z < 1;
     label.style.display = visible ? 'block' : 'none';
@@ -98,8 +98,10 @@ function addHitZone(model, enemy, name, position, scale, damage) {
 export function spawnEnemy(x, z, multiplier = 1) {
   const zombie = new THREE.Group();
   zombie.position.set(x, 0, z);
+  zombie.scale.setScalar(multiplier);
   zombie.userData.esEnemigo = true;
-  const skin = new THREE.MeshStandardMaterial({ color: 0x6f7562, roughness: 1 });
+  const skinColors = [0x6f7562, 0x596653, 0x80715d];
+  const skin = new THREE.MeshStandardMaterial({ color: skinColors[enemies.length % skinColors.length], roughness: 1 });
   const wound = new THREE.MeshStandardMaterial({ color: 0x7d2926, roughness: 1 });
   const body = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.68, 0.28), skin);
   body.position.y = 0.78;
@@ -108,6 +110,9 @@ export function spawnEnemy(x, z, multiplier = 1) {
   head.scale.set(0.9, 1.15, 0.85);
   head.position.y = 1.3;
   zombie.add(head);
+  const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.14, 0.18, 7), skin);
+  neck.position.y = 1.03;
+  zombie.add(neck);
   [-1, 1].forEach(side => {
     const arm = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.62, 0.15), skin);
     arm.position.set(side * 0.31, 0.78, 0);
@@ -120,6 +125,9 @@ export function spawnEnemy(x, z, multiplier = 1) {
   const woundPatch = new THREE.Mesh(new THREE.SphereGeometry(0.09, 6, 4), wound);
   woundPatch.position.set(0, 0.83, -0.16);
   zombie.add(woundPatch);
+  const mouth = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.035, 0.02), wound);
+  mouth.position.set(0, 1.2, -0.2);
+  zombie.add(mouth);
   const eyes = new THREE.MeshBasicMaterial({ color: 0xff3f36 });
   [-0.08, 0.08].forEach(offset => {
     const eye = new THREE.Mesh(new THREE.SphereGeometry(0.025, 6, 4), eyes);
