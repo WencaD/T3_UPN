@@ -503,6 +503,134 @@ button:hover {
   }
 }
 
+/* Ajuste final: briefing industrial sobrio */
+.screen {
+  background:
+    linear-gradient(90deg, #030607e8, #05090bd1 50%, #030607e8),
+    radial-gradient(circle at 50% 45%, #26352d45, transparent 58%);
+}
+
+.screen::before {
+  display: none;
+}
+
+.panel {
+  width: min(500px, calc(100vw - 42px));
+  padding: 32px 36px 27px;
+  border: 1px solid #71817e68;
+  border-left: 2px solid #c59c4c;
+  border-radius: 2px;
+  background: #0b1113ed;
+  box-shadow: 0 14px 42px #000b;
+  clip-path: none;
+}
+
+.panel::after {
+  top: 12px;
+  right: 12px;
+  width: 5px;
+  height: 5px;
+  border: 0;
+  border-radius: 50%;
+  background: #c59c4c;
+  box-shadow: 0 0 6px #c59c4c88;
+}
+
+.panel-header {
+  padding-bottom: 13px;
+  border-bottom: 1px solid #53615e55;
+  color: #78837f;
+  font-size: 9px;
+}
+
+.mission-mark,
+.mission-status {
+  color: #aab4ae;
+}
+
+.mission-status i {
+  width: 5px;
+  height: 5px;
+  background: #7f9b72;
+  box-shadow: none;
+}
+
+.eyebrow {
+  margin-top: 21px;
+  color: #b7a16d;
+  font-size: 10px;
+  letter-spacing: 0.13em;
+}
+
+.panel h2 {
+  margin: 11px 0 13px;
+  font-size: clamp(40px, 6vw, 58px);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+}
+
+.panel h2 em {
+  color: #c59c4c;
+}
+
+.panel-lead {
+  max-width: 430px;
+  color: #aeb8b3;
+  font-size: 12px;
+}
+
+.mission-info {
+  gap: 30px;
+  margin: 22px 0 4px;
+  padding: 12px 0;
+  border-color: #53615e55;
+}
+
+.mission-info strong {
+  color: #e4e6dc;
+  font-size: 20px;
+}
+
+.mission-info span {
+  color: #78837f;
+  font-size: 8px;
+}
+
+button {
+  margin-top: 18px;
+  padding: 14px 20px;
+  border-radius: 1px;
+  background: #c59c4c;
+  box-shadow: none;
+  font-size: 12px;
+}
+
+button:hover {
+  background: #d3b06b;
+  box-shadow: none;
+  transform: none;
+}
+
+.small {
+  margin-top: 15px;
+  color: #697571;
+  font-size: 8px;
+}
+
+.small b {
+  color: #abb5af;
+}
+
+.small span {
+  color: #8d7750;
+}
+
+@media (max-width: 650px) {
+  .panel {
+    padding: 27px 24px 23px;
+  }
+}
+
 /* Rediseño visual táctico */
 :root {
   --color-text: #f2f0e8;
