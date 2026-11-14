@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { camera, isBlocked, mapBounds, scene } from './escena.js';
-import { MODEL_DIR, game } from './configuracion.js';
-import { loadModel, normalizeModel } from './modelos.js';
+import { game } from './configuracion.js';
 
 export const enemies = [];
 const enemyLabels = [];
@@ -96,58 +95,69 @@ function addHitZone(model, enemy, name, position, scale, damage) {
   enemy.hitZones.push(zone);
 }
 
-export async function spawnEnemy(x, z, multiplier = 1) {
-  const model = await loadModel(`${MODEL_DIR}zombie.glb`);
-  normalizeModel(model, 0.34);
-  model.scale.multiplyScalar(multiplier);
-  const size = new THREE.Box3().setFromObject(model).getSize(new THREE.Vector3());
-  const largestDimension = Math.max(size.x, size.y, size.z);
-  if (largestDimension > 0.18) model.scale.multiplyScalar(0.18 / largestDimension);
-  const groundOffset = model.position.y;
-  model.position.set(x, groundOffset, z);
-  model.userData.esEnemigo = true;
-  model.traverse(object => {
-    if (object.isMesh) {
-      object.castShadow = true;
-      object.material = object.material.clone();
-      object.material.roughness = 0.92;
-    }
+export function spawnEnemy(x, z, multiplier = 1) {
+  const zombie = new THREE.Group();
+  zombie.position.set(x, 0, z);
+  zombie.userData.esEnemigo = true;
+  const skin = new THREE.MeshStandardMaterial({ color: 0x6f7562, roughness: 1 });
+  const wound = new THREE.MeshStandardMaterial({ color: 0x7d2926, roughness: 1 });
+  const body = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.68, 0.28), skin);
+  body.position.y = 0.78;
+  zombie.add(body);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.23, 8, 6), skin);
+  head.scale.set(0.9, 1.15, 0.85);
+  head.position.y = 1.3;
+  zombie.add(head);
+  [-1, 1].forEach(side => {
+    const arm = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.62, 0.15), skin);
+    arm.position.set(side * 0.31, 0.78, 0);
+    arm.rotation.z = side * -0.16;
+    zombie.add(arm);
+    const leg = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.62, 0.18), wound);
+    leg.position.set(side * 0.12, 0.3, 0);
+    zombie.add(leg);
+  });
+  const woundPatch = new THREE.Mesh(new THREE.SphereGeometry(0.09, 6, 4), wound);
+  woundPatch.position.set(0, 0.83, -0.16);
+  zombie.add(woundPatch);
+  const eyes = new THREE.MeshBasicMaterial({ color: 0xff3f36 });
+  [-0.08, 0.08].forEach(offset => {
+    const eye = new THREE.Mesh(new THREE.SphereGeometry(0.025, 6, 4), eyes);
+    eye.position.set(offset, 1.34, -0.2);
+    zombie.add(eye);
+  });
+  zombie.traverse(object => {
+    if (object.isMesh) object.castShadow = true;
   });
   const warningLight = new THREE.PointLight(0xff493d, 0.7, 1.8);
   warningLight.position.set(0, 0.3, 0.04);
-  model.add(warningLight);
-  const eyeMaterial = new THREE.MeshBasicMaterial({ color: 0xff463d });
-  [-0.055, 0.055].forEach(xOffset => {
-    const eye = new THREE.Mesh(new THREE.SphereGeometry(0.018, 8, 6), eyeMaterial);
-    eye.position.set(xOffset, 0.29, 0.13);
-    model.add(eye);
-  });
-  scene.add(model);
+  zombie.add(warningLight);
+  scene.add(zombie);
   const enemy = {
-    model, groundOffset, hp: 2, active: false, dead: false,
+    model: zombie, hp: 2, active: false, dead: false,
     speed: 0.7 + Math.random() * 0.2, attackCooldown: 0, hitFlash: 0,
     walkTime: Math.random() * 3,
     attackTime: 0,
     variant: Math.random(), hitZones: [],
-    rig: prepareRig(model)
+    rig: prepareRig(zombie)
   };
-  addHitZone(model, enemy, 'cuerpo-completo', new THREE.Vector3(0, 0.68, 0), new THREE.Vector3(1.05, 1.4, 0.9), 1);
-  addHitZone(model, enemy, 'cabeza', new THREE.Vector3(0, 1.08, 0.02), new THREE.Vector3(0.34, 0.34, 0.34), 1);
-  addHitZone(model, enemy, 'torso', new THREE.Vector3(0, 0.7, 0), new THREE.Vector3(0.62, 0.72, 0.42), 1);
-  addHitZone(model, enemy, 'brazo-izquierdo', new THREE.Vector3(-0.25, 0.68, 0), new THREE.Vector3(0.24, 0.68, 0.26), 1);
-  addHitZone(model, enemy, 'brazo-derecho', new THREE.Vector3(0.25, 0.68, 0), new THREE.Vector3(0.24, 0.68, 0.26), 1);
-  addHitZone(model, enemy, 'piernas', new THREE.Vector3(0, 0.28, 0), new THREE.Vector3(0.48, 0.58, 0.34), 1);
-  model.userData.enemyReference = enemy;
+  addHitZone(zombie, enemy, 'cuerpo-completo', new THREE.Vector3(0, 0.72, 0), new THREE.Vector3(0.7, 1.35, 0.55), 1);
+  addHitZone(zombie, enemy, 'cabeza', new THREE.Vector3(0, 1.3, 0), new THREE.Vector3(0.34, 0.34, 0.34), 1);
+  addHitZone(zombie, enemy, 'torso', new THREE.Vector3(0, 0.8, 0), new THREE.Vector3(0.5, 0.65, 0.4), 1);
+  addHitZone(zombie, enemy, 'brazo-izquierdo', new THREE.Vector3(-0.3, 0.78, 0), new THREE.Vector3(0.22, 0.6, 0.24), 1);
+  addHitZone(zombie, enemy, 'brazo-derecho', new THREE.Vector3(0.3, 0.78, 0), new THREE.Vector3(0.22, 0.6, 0.24), 1);
+  addHitZone(zombie, enemy, 'piernas', new THREE.Vector3(0, 0.3, 0), new THREE.Vector3(0.42, 0.58, 0.3), 1);
+  zombie.userData.enemyReference = enemy;
   enemies.push(enemy);
   createEnemyLabel(enemy);
-  model.rotation.y = Math.PI + (Math.random() - 0.5) * 0.18;
+  zombie.rotation.y = Math.PI + (Math.random() - 0.5) * 0.18;
 }
 
 function animateBody(enemy, moving) {
   const { bones, baseRotation } = enemy.rig;
   const swing = Math.sin(enemy.walkTime) * (moving ? 0.42 : 0.06);
   const bounce = Math.abs(Math.sin(enemy.walkTime * 2)) * (moving ? 0.025 : 0.008);
-  enemy.model.position.y = enemy.groundOffset + bounce;
+  enemy.model.position.y = bounce;
   enemy.model.rotation.z = Math.sin(enemy.walkTime * 0.5) * 0.035;
   enemy.model.rotation.x = enemy.attackTime > 0 ? -0.12 : 0;
   if (!bones.torso) {
