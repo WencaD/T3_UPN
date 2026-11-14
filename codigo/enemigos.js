@@ -102,8 +102,9 @@ export async function spawnEnemy(x, z, multiplier = 1) {
   model.scale.multiplyScalar(multiplier);
   const size = new THREE.Box3().setFromObject(model).getSize(new THREE.Vector3());
   const largestDimension = Math.max(size.x, size.y, size.z);
-  if (largestDimension > 0.28) model.scale.multiplyScalar(0.28 / largestDimension);
-  model.position.set(x, 0, z);
+  if (largestDimension > 0.18) model.scale.multiplyScalar(0.18 / largestDimension);
+  const groundOffset = model.position.y;
+  model.position.set(x, groundOffset, z);
   model.userData.esEnemigo = true;
   model.traverse(object => {
     if (object.isMesh) {
@@ -123,7 +124,7 @@ export async function spawnEnemy(x, z, multiplier = 1) {
   });
   scene.add(model);
   const enemy = {
-    model, hp: 2, active: false, dead: false,
+    model, groundOffset, hp: 2, active: false, dead: false,
     speed: 0.7 + Math.random() * 0.2, attackCooldown: 0, hitFlash: 0,
     walkTime: Math.random() * 3,
     attackTime: 0,
@@ -146,7 +147,7 @@ function animateBody(enemy, moving) {
   const { bones, baseRotation } = enemy.rig;
   const swing = Math.sin(enemy.walkTime) * (moving ? 0.42 : 0.06);
   const bounce = Math.abs(Math.sin(enemy.walkTime * 2)) * (moving ? 0.025 : 0.008);
-  enemy.model.position.y = bounce;
+  enemy.model.position.y = enemy.groundOffset + bounce;
   enemy.model.rotation.z = Math.sin(enemy.walkTime * 0.5) * 0.035;
   enemy.model.rotation.x = enemy.attackTime > 0 ? -0.12 : 0;
   if (!bones.torso) {
