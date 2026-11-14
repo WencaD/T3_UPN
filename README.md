@@ -1,31 +1,147 @@
 # Operación Extracción
 
-Videojuego FPS 3D para la evaluación T3. El código JavaScript está organizado en `codigo/` y usa los modelos GLB ubicados en `Modelos 3D/`:
+Videojuego FPS 3D desarrollado para la evaluación T3 de Computación Gráfica y
+Visual. El jugador debe atravesar una zona industrial infestada, administrar
+sus recursos y llegar al punto de extracción sin ser atrapado.
 
-- `ray_gun_v1.glb`: arma 1.
-- `link_master_sword.glb`: arma 2.
-- `zombie.glb`: enemigos.
-- `bullet_kin.glb`: cajas de munición.
-- `med_kit.glb`: botiquines.
+## Tecnologías
 
-## Ejecutar
+- HTML5, CSS3 y JavaScript ES Modules.
+- Three.js `0.160.0`.
+- GLTFLoader para cargar modelos `.glb`.
+- WebGL para el renderizado 3D.
 
-Se necesita servir la carpeta por HTTP para que el navegador pueda cargar los módulos y los archivos GLB. Con Python instalado:
+## Requisitos
+
+- Navegador moderno con soporte para WebGL y JavaScript Modules.
+- Python 3 instalado para ejecutar un servidor local.
+- No se debe abrir `index.html` directamente con `file://`, porque los módulos
+  y modelos GLB requieren una conexión HTTP.
+
+## Ejecución
+
+Desde la carpeta raíz del proyecto, ejecuta:
 
 ```powershell
 py -m http.server 8000
 ```
 
-Después abre `http://localhost:8000` en el navegador.
+Después abre en el navegador:
+
+```text
+http://localhost:8000
+```
+
+Para detener el servidor, presiona `Ctrl + C` en la terminal.
 
 ## Controles
 
-- `W A S D`: movimiento.
-- Mouse: orientar la cámara.
-- Clic izquierdo: un disparo por clic.
-- `1`: Ray Gun (18 balas).
-- `2`: Master Sword (arma cuerpo a cuerpo, sin recarga).
-- Acércate a una caja de balas para recuperar la munición de la Ray Gun.
-- Acércate a un botiquín para recuperar salud.
+| Control | Acción |
+| --- | --- |
+| `W` | Avanzar |
+| `S` | Retroceder |
+| `A` | Desplazarse a la izquierda |
+| `D` | Desplazarse a la derecha |
+| Movimiento del mouse | Orientar la cámara |
+| Clic izquierdo | Realizar un disparo |
+| `1` | Seleccionar la Ray Gun |
+| `2` | Seleccionar la Master Sword |
+| `Esc` | Liberar el cursor |
 
-Cada zombi se activa al estar a 11 unidades, persigue al jugador y requiere exactamente dos impactos. Los ataques reducen la salud y los botiquines la recuperan. Si la salud llega a cero aparece `GAME OVER`; alcanza el círculo verde al final del recorrido para ganar.
+Cada clic izquierdo genera un único disparo. Mantener presionado el mouse no
+activa disparos automáticos.
+
+## Mecánicas principales
+
+- Cámara en primera persona con movimiento WASD y orientación mediante mouse.
+- Dos armas 3D:
+  - **Ray Gun:** comienza con 18 municiones y utiliza cajas de abastecimiento.
+  - **Master Sword:** arma cuerpo a cuerpo sin sistema de recarga.
+- Los zombis se activan al acercarse el jugador y lo persiguen.
+- Cada zombi tiene dos puntos de resistencia.
+- Cualquier parte del cuerpo puede recibir impactos:
+  - cabeza,
+  - torso,
+  - brazos,
+  - piernas.
+- Cada impacto válido reduce un punto de vida.
+- El zombi queda eliminado exactamente después del segundo impacto.
+- Los zombis no atraviesan las estructuras del escenario.
+- Las cajas de munición restauran la munición de la Ray Gun.
+- Los botiquines restauran salud.
+- El jugador pierde salud si un zombi entra en contacto con él.
+- Si la salud llega a cero, aparece `GAME OVER`.
+- La misión termina al alcanzar la zona verde de extracción.
+
+## Estructura del proyecto
+
+```text
+T3/
+├── index.html
+├── styles.css
+├── README.md
+├── codigo/
+│   ├── armas.js
+│   ├── configuracion.js
+│   ├── enemigos.js
+│   ├── escena.js
+│   ├── interfaz.js
+│   ├── juego.js
+│   ├── modelos.js
+│   └── objetos.js
+└── Modelos 3D/
+    ├── bullet_kin.glb
+    ├── link_master_sword.glb
+    ├── med_kit.glb
+    ├── ray_gun_v1.glb
+    └── zombie.glb
+```
+
+### Módulos JavaScript
+
+- `juego.js`: ciclo principal, entrada del usuario, movimiento y disparos.
+- `configuracion.js`: configuración del jugador, armas y modelos.
+- `escena.js`: construcción del mapa, iluminación y colisiones.
+- `modelos.js`: carga y normalización de modelos GLB.
+- `armas.js`: carga, cambio y animación de armas.
+- `enemigos.js`: zombis, persecución, animación y zonas de impacto.
+- `objetos.js`: munición, botiquines y recogida de objetos.
+- `interfaz.js`: HUD, mensajes, victoria y Game Over.
+
+## Modelos 3D y licencias
+
+Los modelos utilizados se encuentran dentro de `Modelos 3D/` y son parte de
+los recursos entregados con este proyecto:
+
+- `ray_gun_v1.glb`
+- `link_master_sword.glb`
+- `zombie.glb`
+- `bullet_kin.glb`
+- `med_kit.glb`
+
+Antes de la entrega final, registra aquí para cada modelo su autor, URL de
+descarga y licencia correspondiente. Si el recurso fue creado por el
+estudiante, indicar: `Modelo propio`.
+
+## Repositorio
+
+Código fuente del proyecto:
+
+<https://github.com/WencaD/T3_UPN>
+
+## Solución de problemas
+
+### Los modelos no aparecen
+
+Verifica que el servidor se haya iniciado desde la carpeta raíz `T3/` y que
+los archivos `.glb` estén dentro de `Modelos 3D/`.
+
+### El navegador bloquea los módulos
+
+No abras el archivo con doble clic. Ejecuta el servidor HTTP y utiliza
+`http://localhost:8000`.
+
+### El mouse no mueve la cámara
+
+Haz clic dentro del juego para activar Pointer Lock. Presiona `Esc` para
+liberarlo.
