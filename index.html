@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Operación Extracción</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div id="game"></div>
+    <div id="hud">
+      <div class="status-row">
+        <div class="status-card">
+          <div class="status-heading">
+            <span class="label">SALUD</span>
+            <strong id="health">100%</strong>
+          </div>
+          <div class="bar"><i id="health-bar"></i></div>
+        </div>
+        <div class="status-card">
+          <div class="status-heading">
+            <span class="label">MUNICIÓN</span>
+            <strong id="ammo">18 / 18</strong>
+          </div>
+          <div class="bar ammo-bar"><i id="ammo-bar"></i></div>
+        </div>
+      </div>
+      <div id="crosshair"><i></i><i></i><i></i><i></i></div>
+      <div id="toast" class="toast"></div>
+    </div>
+    <div id="start-screen" class="screen">
+      <div class="panel">
+        <p class="eyebrow">ZONA DE CUARENTENA // 07:40</p>
+        <h2>Sobrevive al recorrido.</h2>
+        <p>Recupera munición, atraviesa el sector infestado y alcanza la extracción. Cada zombi requiere dos impactos.</p>
+        <button id="start-button">INICIAR MISIÓN</button>
+        <p class="small">Haz clic para capturar el mouse. Pulsa ESC para liberarlo.</p>
+      </div>
+    </div>
+    <div id="end-screen" class="screen hidden">
+      <div class="panel">
+        <p id="end-kicker" class="eyebrow">TRANSMISIÓN RECIBIDA</p>
+        <h2 id="end-title">MISIÓN COMPLETADA</h2>
+        <p id="end-message">Has llegado a la zona de extracción.</p>
+        <button id="restart-button">REINICIAR PARTIDA</button>
+      </div>
+    </div>
+    <script type="importmap">
+      { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
+    </script>
+    <script type="module" src="./codigo/juego.js"></script>
+  </body>
+</html>

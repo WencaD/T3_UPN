@@ -1,0 +1,4 @@
+.venv/
+check.mjs
+codigo_completo.txt
+*.log

@@ -1,0 +1,390 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+:root {
+  color-scheme: dark;
+  font-family: 'Barlow Condensed', sans-serif;
+
+  --color-text: #eef2e7;
+  --color-muted: #9ba69e;
+  --color-green: #c6ed62;
+  --color-green-bright: #e0ff91;
+  --color-health: #ef806c;
+  --color-danger: #ed5146;
+  --color-panel: #0a110fe8;
+  --font-mono: 'DM Mono', monospace;
+}
+
+/* Base */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background: #080b0f;
+  color: var(--color-text);
+}
+
+canvas {
+  display: block;
+}
+
+/* HUD y efectos de pantalla */
+#hud {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+#hud::before,
+#hud::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+#hud::before {
+  background: radial-gradient(ellipse at center, transparent 48%, #02050699 100%);
+}
+
+#hud::after {
+  opacity: 0.045;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0 3px,
+    #d4e4cc 4px
+  );
+}
+
+.hud-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 28px 34px;
+}
+
+.eyebrow,
+.label,
+.objective,
+.hint,
+.small {
+  font-family: var(--font-mono);
+  letter-spacing: 0.12em;
+}
+
+.eyebrow {
+  margin: 0 0 5px;
+  color: var(--color-green);
+  font-size: 11px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.objective {
+  padding: 13px 18px;
+  border: 1px solid #c6ed6270;
+  background: #0c1511c9;
+  color: #dce8cb;
+  font-size: 11px;
+}
+
+/* Estado del jugador */
+.status-row {
+  position: absolute;
+  inset: auto 15px 18px;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.status-card {
+  min-width: 150px;
+  padding: 0 0 5px;
+  border: 0;
+  border-bottom: 3px solid var(--color-green);
+  background: transparent;
+}
+
+.status-card:first-child {
+  border-bottom-color: var(--color-health);
+}
+
+.status-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 5px;
+  color: #8d9992;
+  font-size: 10px;
+}
+
+.status-card strong {
+  display: block;
+  font-size: 18px;
+  letter-spacing: 0.05em;
+}
+
+#health {
+  color: var(--color-health);
+}
+
+.ammo {
+  color: var(--color-green);
+  font: 500 14px var(--font-mono);
+}
+
+.bar {
+  height: 4px;
+  margin-top: 6px;
+  overflow: hidden;
+  background: #26302c;
+}
+
+.bar i {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--color-health);
+  transition: width 0.2s ease;
+}
+
+.ammo-bar i {
+  background: var(--color-green);
+}
+
+.muted {
+  color: var(--color-muted);
+  font: 11px var(--font-mono);
+}
+
+/* Mira y mensajes */
+#crosshair {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  z-index: 1;
+  width: 27px;
+  height: 27px;
+  border: 2px solid var(--color-green);
+  border-radius: 50%;
+  box-shadow: 0 0 8px #c6ed62aa;
+  transform: translate(-50%, -50%);
+}
+
+#crosshair::after {
+  position: absolute;
+  top: 9px;
+  left: 9px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-green);
+  content: '';
+}
+
+#crosshair i {
+  position: absolute;
+  background: #e8f4d2;
+  box-shadow: 0 0 5px var(--color-green);
+}
+
+#crosshair i:nth-child(1),
+#crosshair i:nth-child(2) {
+  left: 12px;
+  width: 1px;
+  height: 5px;
+}
+
+#crosshair i:nth-child(1) {
+  top: 0;
+}
+
+#crosshair i:nth-child(2) {
+  bottom: 0;
+}
+
+#crosshair i:nth-child(3),
+#crosshair i:nth-child(4) {
+  top: 12px;
+  width: 5px;
+  height: 1px;
+}
+
+#crosshair i:nth-child(3) {
+  left: 0;
+}
+
+#crosshair i:nth-child(4) {
+  right: 0;
+}
+
+.toast {
+  position: absolute;
+  top: 68%;
+  left: 50%;
+  color: var(--color-green);
+  font: 12px var(--font-mono);
+  opacity: 0;
+  transform: translateX(-50%);
+  transition: opacity 0.2s ease;
+}
+
+.toast.show {
+  opacity: 1;
+}
+
+/* Indicadores de enemigos y daño */
+.enemy-label {
+  position: fixed;
+  z-index: 2;
+  width: 74px;
+  text-align: center;
+  pointer-events: none;
+  transform: translate(-50%, -100%);
+}
+
+.enemy-name {
+  color: #ff8276;
+  font: 8px var(--font-mono);
+  letter-spacing: 0.08em;
+  text-shadow: 0 1px 3px #000;
+}
+
+.enemy-health {
+  height: 4px;
+  margin-top: 3px;
+  border: 1px solid #250f0e;
+  background: #210f10;
+}
+
+.enemy-health i {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--color-danger);
+  transition: width 0.15s ease;
+}
+
+.damage-layer {
+  position: absolute;
+  inset: -26px 0 auto;
+}
+
+.damage-layer b {
+  display: block;
+  color: #ffe15a;
+  font: 700 16px 'Barlow Condensed', sans-serif;
+  text-shadow: 0 2px 4px #000;
+  animation: damage-float 0.75s ease-out forwards;
+}
+
+@keyframes damage-float {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1.2);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-24px) scale(0.9);
+  }
+}
+
+/* Pantallas de inicio y final */
+.screen {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(120deg, #06090bd9, #101c16c2);
+}
+
+.panel {
+  width: min(460px, calc(100vw - 48px));
+  padding: 42px;
+  border: 1px solid #9bb87b80;
+  background: var(--color-panel);
+  box-shadow: 12px 12px 0 #c6ed6218;
+}
+
+.panel h2 {
+  margin: 15px 0;
+  font-size: 48px;
+  line-height: 0.95;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
+.panel p:not(.eyebrow):not(.small) {
+  color: #b7c0b9;
+  font: 14px/1.6 var(--font-mono);
+}
+
+button {
+  margin-top: 20px;
+  padding: 15px 20px;
+  border: 0;
+  cursor: pointer;
+  background: var(--color-green);
+  color: #10150e;
+  font: 700 14px var(--font-mono);
+  letter-spacing: 0.08em;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background: var(--color-green-bright);
+  transform: translateY(-2px);
+}
+
+.small {
+  margin-top: 24px;
+  color: #758078;
+  font-size: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Adaptación para pantallas pequeñas */
+@media (max-width: 650px) {
+  .hud-top {
+    padding: 20px;
+  }
+
+  .objective {
+    max-width: 180px;
+    padding: 10px;
+    font-size: 9px;
+  }
+
+  .status-row {
+    inset: auto 14px 14px;
+    gap: 14px;
+  }
+
+  .status-card {
+    min-width: 132px;
+  }
+
+  .panel {
+    padding: 28px;
+  }
+
+  .panel h2 {
+    font-size: 38px;
+  }
+}
