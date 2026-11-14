@@ -35,7 +35,7 @@ function updateEnemyLabels() {
       return;
     }
     const position = enemy.model.position.clone();
-    position.y += 0.43;
+    position.y += 0.58;
     position.project(camera);
     const visible = position.z < 1;
     label.style.display = visible ? 'block' : 'none';
