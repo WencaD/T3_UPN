@@ -1,5 +1,7 @@
 # Operación Extracción
 
+## Descripción del juego
+
 Videojuego FPS 3D desarrollado para la evaluación T3 de Computación Gráfica y
 Visual. El jugador debe atravesar una zona industrial infestada, administrar
 sus recursos y llegar al punto de extracción sin ser atrapado.
@@ -10,6 +12,19 @@ sus recursos y llegar al punto de extracción sin ser atrapado.
 - Three.js `0.160.0`.
 - GLTFLoader para cargar modelos `.glb`.
 - WebGL para el renderizado 3D.
+
+## Instalación
+
+1. Descarga o clona este repositorio:
+
+   ```powershell
+   git clone https://github.com/WencaD/T3_UPN.git
+   cd T3_UPN
+   ```
+
+2. Verifica que la carpeta `Modelos 3D/` contenga los archivos `.glb`.
+3. No es necesario instalar paquetes de Node.js: Three.js y GLTFLoader se
+   cargan mediante CDN desde `index.html`.
 
 ## Requisitos
 
@@ -108,10 +123,20 @@ T3/
 - `objetos.js`: munición, botiquines y recogida de objetos.
 - `interfaz.js`: HUD, mensajes, victoria y Game Over.
 
-## Modelos 3D y licencias
+## Fuentes de recursos externos
 
-Los modelos utilizados se encuentran dentro de `Modelos 3D/` y son parte de
-los recursos entregados con este proyecto:
+### Librerías y tipografías
+
+- Three.js:
+  <https://unpkg.com/three@0.160.0/build/three.module.js>
+- GLTFLoader de Three.js:
+  <https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js>
+- Barlow Condensed y DM Mono, Google Fonts:
+  <https://fonts.google.com/>
+
+### Modelos 3D
+
+Los siguientes archivos son recursos locales incluidos en el repositorio:
 
 - `ray_gun_v1.glb`
 - `link_master_sword.glb`
@@ -119,9 +144,13 @@ los recursos entregados con este proyecto:
 - `bullet_kin.glb`
 - `med_kit.glb`
 
-Antes de la entrega final, registra aquí para cada modelo su autor, URL de
-descarga y licencia correspondiente. Si el recurso fue creado por el
-estudiante, indicar: `Modelo propio`.
+Estos modelos fueron proporcionados para el desarrollo del proyecto y se
+mantienen dentro de `Modelos 3D/`. No se agregaron URLs de descarga externas
+porque el proyecto no contiene la fuente original de esos archivos. Si los
+modelos fueron descargados de una plataforma externa, se debe reemplazar esta
+nota por el autor, URL y licencia de cada recurso antes de la entrega.
+
+No se utilizaron otros recursos externos para la construcción del escenario.
 
 ## Repositorio
 
