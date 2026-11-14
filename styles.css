@@ -502,3 +502,240 @@ button:hover {
     gap: 18px;
   }
 }
+
+/* Rediseño visual táctico */
+:root {
+  --color-text: #f2f0e8;
+  --color-muted: #9aa39d;
+  --color-green: #f2bd55;
+  --color-green-bright: #ffd879;
+  --color-health: #ff6f61;
+  --color-danger: #ff5548;
+  --color-panel: #11191cf2;
+  --font-mono: 'DM Mono', monospace;
+}
+
+body {
+  background: #070b0e;
+}
+
+#hud::before {
+  background: radial-gradient(ellipse at center, transparent 35%, #020406c9 100%);
+}
+
+#hud::after {
+  opacity: 0.025;
+  background: repeating-linear-gradient(0deg, transparent 0 4px, #f2bd55 5px);
+}
+
+.status-row {
+  inset: auto 28px 26px;
+  gap: 18px;
+}
+
+.status-card {
+  min-width: 205px;
+  padding: 12px 14px 13px;
+  border: 1px solid #71817e70;
+  border-bottom: 2px solid var(--color-green);
+  background: #0a1114d9;
+  box-shadow: 0 8px 24px #00000055;
+}
+
+.status-card:first-child {
+  border-bottom-color: var(--color-health);
+}
+
+.status-card strong {
+  font-size: 20px;
+}
+
+.label {
+  margin-bottom: 7px;
+  color: #788784;
+  font-size: 9px;
+}
+
+.bar {
+  height: 3px;
+  margin-top: 9px;
+  background: #263438;
+}
+
+#crosshair {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #f2bd55;
+  border-radius: 2px;
+  box-shadow: 0 0 0 5px #f2bd5512, 0 0 14px #f2bd5588;
+}
+
+#crosshair::after {
+  top: 12px;
+  left: 12px;
+  width: 4px;
+  height: 4px;
+  background: #f2bd55;
+}
+
+#crosshair i {
+  background: #f5f2e7;
+  box-shadow: 0 0 5px #f2bd55;
+}
+
+.toast {
+  top: 63%;
+  padding: 10px 16px;
+  border: 1px solid #f2bd5566;
+  background: #090f11dd;
+  color: #f2bd55;
+  box-shadow: 0 5px 20px #0008;
+}
+
+.enemy-label {
+  width: 100px;
+  padding: 5px 6px;
+  border: 1px solid #ff6f6159;
+  background: #090d0ed9;
+}
+
+.enemy-name {
+  color: #ff9a8f;
+  font-size: 8px;
+}
+
+.enemy-health {
+  height: 3px;
+  border: 0;
+  background: #391b1b;
+}
+
+.enemy-health i {
+  background: linear-gradient(90deg, #ff5548, #ff9b61);
+}
+
+.screen {
+  background:
+    linear-gradient(135deg, #05090cd9 0%, #091419c9 55%, #160f0bd9 100%),
+    radial-gradient(circle at 75% 25%, #f2bd5520, transparent 35%);
+}
+
+.screen::before {
+  background-image:
+    linear-gradient(90deg, transparent 49.8%, #f2bd5516 50%, transparent 50.2%),
+    linear-gradient(0deg, transparent 49.8%, #f2bd550d 50%, transparent 50.2%);
+  background-size: 110px 110px;
+}
+
+.panel {
+  width: min(590px, calc(100vw - 42px));
+  padding: 38px 44px 30px;
+  border: 1px solid #71817e70;
+  border-left: 1px solid #f2bd55;
+  background: linear-gradient(145deg, #111b20f7, #0a1013f5);
+  box-shadow: 20px 20px 0 #f2bd5510, 0 20px 80px #000b;
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%);
+}
+
+.panel::after {
+  top: 0;
+  right: 0;
+  width: 18px;
+  height: 18px;
+  border-color: #f2bd55;
+}
+
+.panel-header {
+  padding-bottom: 16px;
+  border-color: #71817e45;
+}
+
+.mission-mark,
+.mission-status {
+  color: #f2bd55;
+}
+
+.mission-status i {
+  background: #55d5bd;
+  box-shadow: 0 0 10px #55d5bd;
+}
+
+.eyebrow {
+  color: #55d5bd;
+  letter-spacing: 0.18em;
+}
+
+.panel h2 {
+  margin: 18px 0 16px;
+  font-size: clamp(44px, 7vw, 72px);
+  line-height: 0.82;
+  letter-spacing: -0.035em;
+}
+
+.panel h2 em {
+  color: #f2bd55;
+}
+
+.panel-lead {
+  max-width: 470px;
+  color: #c1cbc7;
+}
+
+.mission-info {
+  gap: 42px;
+  margin-top: 28px;
+  border-color: #71817e45;
+}
+
+.mission-info strong {
+  color: #f2f0e8;
+  font-size: 25px;
+}
+
+.mission-info span {
+  color: #7e8d89;
+}
+
+button {
+  background: #f2bd55;
+  color: #11181a;
+  box-shadow: 5px 5px 0 #55d5bd33;
+}
+
+button:hover {
+  background: #ffd879;
+  box-shadow: 5px 5px 0 #55d5bd66, 0 0 28px #f2bd5544;
+}
+
+.small {
+  color: #7e8d89;
+}
+
+.small b {
+  color: #f2f0e8;
+}
+
+.small span {
+  color: #55d5bd;
+}
+
+@media (max-width: 650px) {
+  .status-row {
+    inset: auto 12px 12px;
+  }
+
+  .status-card {
+    min-width: 0;
+    flex: 1;
+    padding: 10px;
+  }
+
+  .panel {
+    width: calc(100vw - 28px);
+    padding: 28px 24px 24px;
+  }
+
+  .mission-info {
+    gap: 22px;
+  }
+}
