@@ -131,6 +131,7 @@ function shoot() {
 }
 
 function setupWorld() {
+  // Construye el mapa, objetos y cinco enemigos.
   buildWorld();
   pickupsReady = Promise.all([
     addPickup('ammo', -3.8, -5),
@@ -146,6 +147,7 @@ function setupWorld() {
 }
 
 function setupInput() {
+  // Configura teclado, mouse, pantalla completa y reinicio.
   addEventListener('keydown', event => {
     keys.add(event.code);
     if (event.code === 'Digit1') equipWeapon('ray');

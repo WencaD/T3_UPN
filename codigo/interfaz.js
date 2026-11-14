@@ -1,11 +1,13 @@
 import { game, weapons } from './configuracion.js';
 
+// Valores anteriores para actualizar el HUD solo cuando cambian.
 let lastAmmoText = '';
 let lastHealthText = '';
 let lastHealthWidth = '';
 let lastAmmoWidth = '';
 
 export function updateHud() {
+  // Sincroniza salud, munición y barras con el estado del juego.
   const active = weapons[game.activeWeapon || 'ray'];
   const ammoText = active.name === 'MASTER SWORD'
     ? '∞ · CUERPO A CUERPO' : `${active.ammo} / ${active.max}`;
@@ -40,6 +42,7 @@ export function showToast(message) {
 }
 
 export function endGame(victory) {
+  // Muestra el resultado y detiene la partida.
   if (game.ended) return;
   game.ended = true;
   game.running = false;

@@ -6,6 +6,7 @@ export const enemies = [];
 const enemyLabels = [];
 let labelTimer = 0;
 
+// Etiqueta de vida sobre cada enemigo activo.
 function createEnemyLabel(enemy) {
   const label = document.createElement('div');
   label.className = 'enemy-label';
@@ -96,6 +97,7 @@ function addHitZone(model, enemy, name, position, scale, damage) {
 }
 
 export function spawnEnemy(x, z, multiplier = 1) {
+  // Construye un zombi, sus hitboxes y su estado de combate.
   const zombie = new THREE.Group();
   zombie.position.set(x, 0, z);
   zombie.scale.setScalar(multiplier);
@@ -184,6 +186,7 @@ function animateBody(enemy, moving) {
 }
 
 export function updateEnemies(delta, onAttack) {
+  // Activa, mueve y actualiza el ataque de cada zombi.
   enemies.forEach(enemy => {
     if (enemy.dead) return;
     const distance = enemy.model.position.distanceTo(camera.position);

@@ -3,6 +3,7 @@ import { camera, scene } from './escena.js';
 import { loadModel, normalizeModel } from './modelos.js';
 import { game, weapons } from './configuracion.js';
 
+// Arma equipada, modelo visible y bloqueo entre disparos.
 let activeWeapon = 'ray';
 let weaponObject;
 let fireLocked = false;
@@ -12,6 +13,7 @@ export function getWeaponObject() { return weaponObject; }
 export function isFireLocked() { return fireLocked; }
 
 export async function loadWeapons() {
+  // Carga y coloca las armas en la cámara FPS.
   for (const weapon of Object.values(weapons)) {
     weapon.model = await loadModel(weapon.path);
     normalizeModel(weapon.model, weapon.height);
@@ -29,6 +31,7 @@ export async function loadWeapons() {
 }
 
 export function equipWeapon(id, instant = false) {
+  // Cambia de arma con una animación de entrada y salida.
   if (id === activeWeapon && !instant) return;
   if (instant) {
     activeWeapon = id;

@@ -3,9 +3,11 @@ import { camera, scene } from './escena.js';
 import { MODEL_DIR, weapons, game } from './configuracion.js';
 import { loadModel, normalizeModel } from './modelos.js';
 
+// Objetos coleccionables activos en el mapa.
 export const pickups = [];
 
 export async function addPickup(type, x, z) {
+  // Crea munición o botiquín con señal visual de recogida.
   const model = await loadModel(`${MODEL_DIR}${type === 'ammo' ? 'bullet_kin.glb' : 'med_kit.glb'}`);
   normalizeModel(model, type === 'ammo' ? 0.42 : 0.5);
   model.position.set(x, 0.02, z);
@@ -29,6 +31,7 @@ export async function addPickup(type, x, z) {
 }
 
 export function collectPickups(onCollect) {
+  // Anima los objetos y aplica sus efectos por proximidad.
   const elapsed = performance.now() * 0.001;
   pickups.forEach((pickup, index) => {
     pickup.rotation.y += 0.015;

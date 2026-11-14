@@ -1,3 +1,4 @@
+// Estado global, jugador y configuración de armas.
 export const MODEL_DIR = '../Modelos%203D/';
 
 export const player = {

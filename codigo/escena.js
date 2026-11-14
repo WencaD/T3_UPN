@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 
+// Escena, cámara, renderer y límites del mapa.
 export const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x05080a);
 scene.fog = new THREE.Fog(0x070b0d, 18, 135);
@@ -29,6 +30,7 @@ export function material(color, roughness = 0.8, emissive = 0) {
 }
 
 export function addBox(name, x, y, z, width, height, depth, color, solid = true) {
+  // Crea una estructura y registra su colisión si es sólida.
   const mesh = new THREE.Mesh(new THREE.BoxGeometry(width, height, depth), material(color));
   mesh.name = name;
   mesh.position.set(x, y, z);

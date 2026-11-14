@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
 
+// Caché para evitar descargar varias veces el mismo GLB.
 export const loader = new GLTFLoader();
 const modelCache = new Map();
 
@@ -14,6 +15,7 @@ export function loadModel(path) {
 }
 
 export function normalizeModel(model, targetHeight) {
+  // Ajusta la altura y apoya el modelo sobre el suelo.
   const bounds = new THREE.Box3().setFromObject(model);
   const size = bounds.getSize(new THREE.Vector3());
   model.scale.multiplyScalar(targetHeight / Math.max(size.y, 0.001));
