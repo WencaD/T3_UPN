@@ -12,7 +12,6 @@ const keys = new Set();
 let rayEffects = [];
 let pickupsReady;
 let enemiesReady;
-let weaponsReady;
 
 // Movimiento y cámara FPS.
 function movePlayer(delta) {
@@ -173,22 +172,16 @@ function setupInput() {
     camera.updateProjectionMatrix();
     renderer.setSize(innerWidth, innerHeight);
   });
-  document.querySelector('#start-button').addEventListener('click', async () => {
+  document.querySelector('#start-button').addEventListener('click', () => {
     const startButton = document.querySelector('#start-button');
     startButton.disabled = true;
-    startButton.textContent = 'CARGANDO EQUIPO...';
-    try {
-      await Promise.all([pickupsReady, enemiesReady, weaponsReady]);
-    } catch (error) {
-      console.error('No se pudieron cargar los objetos del mapa.', error);
-      startButton.disabled = false;
-      startButton.textContent = 'REINTENTAR CARGA';
-      showToast('NO SE PUDO CARGAR EL EQUIPO');
-      return;
-    }
     document.querySelector('#start-screen').classList.add('hidden');
     game.running = true;
     renderer.domElement.requestPointerLock();
+    Promise.all([pickupsReady, enemiesReady]).catch(error => {
+      console.error('No se pudieron cargar todos los recursos del mapa.', error);
+      showToast('ALGUNOS RECURSOS SIGUEN CARGANDO');
+    });
   });
   document.querySelector('#restart-button').addEventListener('click', () => location.reload());
 }
@@ -215,7 +208,7 @@ function animate() {
 setWeaponKeys(keys);
 setupWorld();
 setupInput();
-weaponsReady = loadWeapons().then(() => {
+loadWeapons().then(() => {
   game.activeWeapon = getActiveWeapon();
   updateHud();
 });

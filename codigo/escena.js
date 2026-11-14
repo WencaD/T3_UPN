@@ -8,11 +8,10 @@ export const camera = new THREE.PerspectiveCamera(72, innerWidth / innerHeight, 
 camera.position.set(0, 1.65, 20);
 camera.rotation.order = 'YXZ';
 
-export const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+export const renderer = new THREE.WebGLRenderer({ antialias: false });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.15));
 renderer.setSize(innerWidth, innerHeight);
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.shadowMap.enabled = false;
 document.querySelector('#game').appendChild(renderer.domElement);
 
 export const colliders = [];
