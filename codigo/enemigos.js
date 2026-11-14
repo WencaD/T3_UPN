@@ -102,7 +102,7 @@ export async function spawnEnemy(x, z, multiplier = 1) {
   model.scale.multiplyScalar(multiplier);
   const size = new THREE.Box3().setFromObject(model).getSize(new THREE.Vector3());
   const largestDimension = Math.max(size.x, size.y, size.z);
-  if (largestDimension > 0.4) model.scale.multiplyScalar(0.4 / largestDimension);
+  if (largestDimension > 0.28) model.scale.multiplyScalar(0.28 / largestDimension);
   model.position.set(x, 0, z);
   model.userData.esEnemigo = true;
   model.traverse(object => {
