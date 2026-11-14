@@ -130,7 +130,7 @@ export async function spawnEnemy(x, z, multiplier = 1) {
     rig: prepareRig(model)
   };
   addHitZone(model, enemy, 'cuerpo-completo', new THREE.Vector3(0, 0.68, 0), new THREE.Vector3(1.05, 1.4, 0.9), 1);
-  addHitZone(model, enemy, 'cabeza', new THREE.Vector3(0, 1.08, 0.02), new THREE.Vector3(0.34, 0.34, 0.34), 2);
+  addHitZone(model, enemy, 'cabeza', new THREE.Vector3(0, 1.08, 0.02), new THREE.Vector3(0.34, 0.34, 0.34), 1);
   addHitZone(model, enemy, 'torso', new THREE.Vector3(0, 0.7, 0), new THREE.Vector3(0.62, 0.72, 0.42), 1);
   addHitZone(model, enemy, 'brazo-izquierdo', new THREE.Vector3(-0.25, 0.68, 0), new THREE.Vector3(0.24, 0.68, 0.26), 1);
   addHitZone(model, enemy, 'brazo-derecho', new THREE.Vector3(0.25, 0.68, 0), new THREE.Vector3(0.24, 0.68, 0.26), 1);

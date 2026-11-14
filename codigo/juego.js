@@ -10,7 +10,6 @@ const clock = new THREE.Clock();
 const raycaster = new THREE.Raycaster();
 const keys = new Set();
 let rayEffects = [];
-let firing = false;
 let pickupsReady;
 
 // Movimiento y cámara FPS.
@@ -91,7 +90,7 @@ function shoot() {
   const weaponId = getActiveWeapon();
   const weapon = weapons[weaponId];
   if (weapon.ammo === 0) {
-    if (!firing) showToast('SIN MUNICIÓN — encuentra una caja');
+    showToast('SIN MUNICIÓN — encuentra una caja');
     return;
   }
   if (weaponId === 'ray') weapon.ammo--;
@@ -158,13 +157,8 @@ function setupInput() {
   addEventListener('keyup', event => keys.delete(event.code));
   addEventListener('mousedown', event => {
     if (event.button !== 0) return;
-    firing = true;
     shoot();
   });
-  addEventListener('mouseup', event => {
-    if (event.button === 0) firing = false;
-  });
-  addEventListener('blur', () => { firing = false; });
   addEventListener('mousemove', event => {
     if (document.pointerLockElement !== renderer.domElement || !game.running || game.ended) return;
     game.yaw -= event.movementX * 0.0022;
@@ -204,7 +198,6 @@ function animate() {
   const delta = Math.min(clock.getDelta(), 0.05);
   if (game.running && !game.ended) {
     movePlayer(delta);
-    if (firing) shoot();
     updateEnemies(delta, () => {
       game.health = Math.max(0, game.health - 25);
       showToast(`¡ATAQUE! SALUD ${game.health}%`);
