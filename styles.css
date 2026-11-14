@@ -631,6 +631,93 @@ button:hover {
   }
 }
 
+/* Composición de briefing en dos zonas */
+#start-screen .panel {
+  width: min(760px, calc(100vw - 42px));
+  padding: 30px 34px 22px;
+}
+
+.briefing-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(190px, 0.8fr);
+  gap: 34px;
+  margin-top: 21px;
+}
+
+.briefing-main {
+  padding-right: 34px;
+  border-right: 1px solid #53615e55;
+}
+
+.briefing-main .eyebrow {
+  margin-top: 0;
+}
+
+.briefing-main h2 {
+  margin-top: 12px;
+}
+
+.briefing-main button {
+  width: auto;
+  min-width: 235px;
+  margin-top: 28px;
+}
+
+.briefing-side {
+  align-self: end;
+  padding-bottom: 4px;
+}
+
+.side-label {
+  color: #b7a16d;
+  font: 9px var(--font-mono);
+  letter-spacing: 0.16em;
+}
+
+.briefing-side > p {
+  margin: 15px 0 0;
+  color: #9da9a4;
+  font: 12px/1.6 var(--font-mono);
+}
+
+.briefing-side .mission-info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 26px;
+  padding: 15px 0;
+}
+
+.briefing-side .mission-info strong {
+  font-size: 19px;
+}
+
+@media (max-width: 650px) {
+  #start-screen .panel {
+    padding: 26px 22px 21px;
+  }
+
+  .briefing-layout {
+    display: block;
+    margin-top: 18px;
+  }
+
+  .briefing-main {
+    padding-right: 0;
+    border-right: 0;
+  }
+
+  .briefing-main button {
+    width: 100%;
+    min-width: 0;
+    margin-top: 22px;
+  }
+
+  .briefing-side {
+    display: none;
+  }
+}
+
 /* Rediseño visual táctico */
 :root {
   --color-text: #f2f0e8;

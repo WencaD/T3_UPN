@@ -11,6 +11,8 @@ const raycaster = new THREE.Raycaster();
 const keys = new Set();
 let rayEffects = [];
 let pickupsReady;
+let enemiesReady;
+let weaponsReady;
 
 // Movimiento y cámara FPS.
 function movePlayer(delta) {
@@ -38,13 +40,10 @@ function createRayEffect(start, end, hit) {
   beam.position.copy(start).add(end).multiplyScalar(0.5);
   beam.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.normalize());
   scene.add(beam);
-  const flash = new THREE.PointLight(0x55eaff, 5, 3);
-  flash.position.copy(end);
-  scene.add(flash);
-  rayEffects.push({ beam, flash, life: 0.12 });
+  rayEffects.push({ beam, life: 0.12 });
   while (rayEffects.length > 4) {
     const oldEffect = rayEffects.shift();
-    scene.remove(oldEffect.beam, oldEffect.flash);
+    scene.remove(oldEffect.beam);
     oldEffect.beam.geometry.dispose();
     oldEffect.beam.material.dispose();
   }
@@ -55,9 +54,8 @@ function updateRayEffects(delta) {
   rayEffects = rayEffects.filter(effect => {
     effect.life -= delta;
     effect.beam.material.opacity = Math.max(0, effect.life * 8);
-    effect.flash.intensity = Math.max(0, effect.life * 40);
     if (effect.life <= 0) {
-      scene.remove(effect.beam, effect.flash);
+      scene.remove(effect.beam);
       effect.beam.geometry.dispose();
       effect.beam.material.dispose();
       return false;
@@ -142,8 +140,10 @@ function setupWorld() {
     addPickup('medkit', -3.8, -70),
     addPickup('ammo', 3.8, -91)
   ]);
-  [[-2.4, -1, 0.72], [2.4, -22, 0.72], [-2.4, -45, 0.7], [2.4, -68, 0.72], [0, -91, 0.7]]
-    .forEach(enemy => spawnEnemy(...enemy));
+  enemiesReady = Promise.all(
+    [[-2.4, -1, 0.72], [2.4, -22, 0.72], [-2.4, -45, 0.7], [2.4, -68, 0.72], [0, -91, 0.7]]
+      .map(enemy => spawnEnemy(...enemy))
+  );
 }
 
 function setupInput() {
@@ -178,7 +178,7 @@ function setupInput() {
     startButton.disabled = true;
     startButton.textContent = 'CARGANDO EQUIPO...';
     try {
-      await pickupsReady;
+      await Promise.all([pickupsReady, enemiesReady, weaponsReady]);
     } catch (error) {
       console.error('No se pudieron cargar los objetos del mapa.', error);
       startButton.disabled = false;
@@ -215,7 +215,7 @@ function animate() {
 setWeaponKeys(keys);
 setupWorld();
 setupInput();
-loadWeapons().then(() => {
+weaponsReady = loadWeapons().then(() => {
   game.activeWeapon = getActiveWeapon();
   updateHud();
 });

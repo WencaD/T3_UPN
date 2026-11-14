@@ -5,6 +5,7 @@ import { loadModel, normalizeModel } from './modelos.js';
 
 export const enemies = [];
 const enemyLabels = [];
+let labelTimer = 0;
 
 function createEnemyLabel(enemy) {
   const label = document.createElement('div');
@@ -208,10 +209,17 @@ export function updateEnemies(delta, onAttack) {
     if (enemy.active && enemy.model.position.distanceTo(camera.position) > 1.8) {
       enemy.attackTime = Math.max(0, enemy.attackTime - delta * 3);
     }
+    const previousHitFlash = enemy.hitFlash;
     enemy.hitFlash = Math.max(0, enemy.hitFlash - delta);
-    enemy.model.traverse(object => {
-      if (object.isMesh) object.material.emissiveIntensity = enemy.hitFlash ? 2 : 0;
-    });
+    if ((previousHitFlash === 0) !== (enemy.hitFlash === 0)) {
+      enemy.model.traverse(object => {
+        if (object.isMesh) object.material.emissiveIntensity = enemy.hitFlash ? 2 : 0;
+      });
+    }
   });
-  updateEnemyLabels();
+  labelTimer -= delta;
+  if (labelTimer <= 0) {
+    updateEnemyLabels();
+    labelTimer = 0.05;
+  }
 }
